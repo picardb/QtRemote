@@ -22,7 +22,8 @@ SOURCES += \
     src/model/Logger.cpp \
     src/widgets/LogWidget.cpp \
     src/widgets/MainWidget.cpp \
-    src/model/Server.cpp
+    src/model/Server.cpp \
+    src/widgets/SetupWidget.cpp
 
 HEADERS  += \
     src/widgets/MainWindow.h \
@@ -31,4 +32,5 @@ HEADERS  += \
     src/model/Logger.h \
     src/widgets/LogWidget.h \
     src/widgets/MainWidget.h \
-    src/model/Server.h
+    src/model/Server.h \
+    src/widgets/SetupWidget.h

@@ -1,8 +1,18 @@
+/* This source file is distributed under the MIT license
+ * (see attached LICENSE.txt file for details)
+ */
+
 #pragma once
 
 #include <QObject>
 #include <QString>
 
+
+/*
+ * Logger class
+ *
+ * Manages the application log.
+ */
 class Logger : public QObject
 {
     Q_OBJECT

@@ -1,3 +1,7 @@
+/* This source file is distributed under the MIT license
+ * (see attached LICENSE.txt file for details)
+ */
+
 #pragma once
 
 #include <QObject>
@@ -5,6 +9,11 @@
 #include <QSocketNotifier>
 #include "dns_sd.h"
 
+/*
+ * RefNotifier class
+ *
+ * Helper class only used to associate a DNSServiceRef with a QSocketNotifier.
+ */
 class RefNotifier : public QSocketNotifier
 {
 private:
@@ -17,6 +26,11 @@ public:
     DNSServiceRef ref() const { return m_ref; }
 };
 
+/*
+ * DnsServiceRegistrar class
+ *
+ * This class allows the registration of several DNS services.
+ */
 class DnsServiceRegistrar : public QObject
 {
 	Q_OBJECT
@@ -35,10 +49,10 @@ public:
     void remove(DNSServiceRef ref);
 
 private slots:
-    void onNotifierActivated(int );
+     void onNotifierActivated();
 
 signals:
     void error(const QString& );
     void added(const QString& );
-    void removed();
+     void removed(const QString& );
 };

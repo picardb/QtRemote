@@ -1,9 +1,19 @@
+/* This source file is distributed under the MIT license
+ * (see attached LICENSE.txt file for details)
+ */
+
 #pragma once
 
 #include <QWidget>
 #include <QTextEdit>
 #include "../model/Model.h"
 
+
+/*
+ * LogWidget class
+ *
+ * Prints the application log.
+ */
 class LogWidget : public QWidget
 {
     Q_OBJECT
