@@ -12,9 +12,7 @@ int main(int argc, char *argv[])
 
 	/* Create main window */
     MainWindow w(&m);
-	w.show();
-    m.dnsRegistrarAdd("_toto._tcp", 12000);
-    m.dnsRegistrarAdd("_toto2._tcp", 12000, "TOTO2");
+    w.show();
 
 	/* Start */
 	return a.exec();

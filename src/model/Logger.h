@@ -10,7 +10,7 @@ class Logger : public QObject
 public:
     Logger(QObject *parent = 0);
 
-    void addEntry(const QString& str);
+    void addEntry(const QString& msg);
 
 signals:
     entryAdded(const QString& );

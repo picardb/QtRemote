@@ -12,7 +12,7 @@ private:
 
 public:
     RefNotifier(DNSServiceRef ref, qintptr socket, Type type, QObject *parent)
-        : m_ref(ref), QSocketNotifier(socket, type, parent) {}
+        : QSocketNotifier(socket, type, parent), m_ref(ref) {}
 
     DNSServiceRef ref() const { return m_ref; }
 };

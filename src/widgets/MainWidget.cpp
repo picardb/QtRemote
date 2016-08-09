@@ -17,3 +17,8 @@ MainWidget::MainWidget(Model *pModel, QWidget *parent)
     /* Setup widget */
     setLayout(pMainLayout);
 }
+
+void MainWidget::showEvent(QShowEvent *event)
+{
+    m_pModel->serverStart();
+}

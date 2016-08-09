@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -21,7 +21,8 @@ SOURCES += \
     src/model/DnsServiceRegistrar.cpp \
     src/model/Logger.cpp \
     src/widgets/LogWidget.cpp \
-    src/widgets/MainWidget.cpp
+    src/widgets/MainWidget.cpp \
+    src/model/Server.cpp
 
 HEADERS  += \
     src/widgets/MainWindow.h \
@@ -29,4 +30,5 @@ HEADERS  += \
     src/model/DnsServiceRegistrar.h \
     src/model/Logger.h \
     src/widgets/LogWidget.h \
-    src/widgets/MainWidget.h
+    src/widgets/MainWidget.h \
+    src/model/Server.h

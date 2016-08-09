@@ -10,4 +10,7 @@ private:
 
 public:
     MainWidget(Model *pModel, QWidget *parent = 0);
+
+protected:
+    virtual void showEvent(QShowEvent *event);
 };
