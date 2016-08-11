@@ -4,6 +4,7 @@
 
 #include "SetupWidget.h"
 
+#include <QGridLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QLabel>
@@ -25,21 +26,21 @@ SetupWidget::SetupWidget(Model *pModel, QWidget *parent)
 {
     /* Create layouts */
     QVBoxLayout *pMainLayout = new QVBoxLayout;
-    QVBoxLayout *pBoxLayout = new QVBoxLayout;
+    QGridLayout *pBoxLayout = new QGridLayout;
 
     /* Create children widgets */
     QGroupBox *pSetupBox = new QGroupBox;
     QLabel *pPortLabel = new QLabel("Port number (0=auto):");
-    pBoxLayout->addWidget(pPortLabel);
+    pBoxLayout->addWidget(pPortLabel, 0, 0);
     m_pPortEdit = new QLineEdit;
     m_pPortEdit->setText("0");
     m_pPortEdit->setFixedWidth(PORT_EDIT_WIDTH);
-    pBoxLayout->addWidget(m_pPortEdit, 0, Qt::AlignLeft);
+    pBoxLayout->addWidget(m_pPortEdit, 0, 1);
     m_pStartStopButton = new QPushButton;
     m_pStartStopButton->setFixedWidth(START_STOP_BUTTON_WIDTH);
     connect(m_pStartStopButton, SIGNAL(clicked(bool)),
             this, SLOT(onStartStopButtonClicked()));
-    pBoxLayout->addWidget(m_pStartStopButton, 0, Qt::AlignCenter);
+    pBoxLayout->addWidget(m_pStartStopButton, 1, 0, 1, 2, Qt::AlignCenter);
     pSetupBox->setLayout(pBoxLayout);
     pSetupBox->setTitle("Setup");
     pMainLayout->addWidget(pSetupBox);
