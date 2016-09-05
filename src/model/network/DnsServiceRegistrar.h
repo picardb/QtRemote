@@ -37,7 +37,6 @@ class DnsServiceRegistrar : public QObject
 
 private:
     QVector<DNSServiceRef>	m_serviceList;
-    DNSServiceRef           m_tempRef;
 
     static void DNSSD_API registerCallback(DNSServiceRef ref, DNSServiceFlags flags, DNSServiceErrorType errorCode,
                                            const char *name, const char *regtype, const char *domain, void *context);
@@ -50,9 +49,4 @@ public:
 
 private slots:
      void onNotifierActivated();
-
-signals:
-    void error(const QString& );
-    void added(const QString& );
-     void removed(const QString& );
 };

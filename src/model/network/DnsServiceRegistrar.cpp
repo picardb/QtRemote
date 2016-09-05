@@ -6,6 +6,7 @@
 
 #include <QSocketNotifier>
 #include <QtEndian>
+#include "model/Model.h"
 
 
 /*
@@ -50,14 +51,14 @@ DNSServiceRef DnsServiceRegistrar::add(const QString& type, quint16 port, const 
      DNSServiceErrorType err = DNSServiceRegister(&ref, 0, 0, nameStr, type.toUtf8().data(), NULL,
                                                                  NULL, qToBigEndian(port), 0, NULL, registerCallback, this);
     if (err != kDNSServiceErr_NoError) {
-        emit error(QString("Error while registering service (error code = %1)").arg(err));
+        Model::logger().addEntry(Logger::Error, QString("Error while registering service (error code = %1)").arg(err));
         return NULL;
     }
 
     /* Create the QSocketNotifier */
     int sockFd = DNSServiceRefSockFD(ref);
     RefNotifier *pNotif = new RefNotifier(ref, sockFd, QSocketNotifier::Read, this);
-     connect(pNotif, SIGNAL(activated(int)), this, SLOT(onNotifierActivated()));
+    connect(pNotif, SIGNAL(activated(int)), this, SLOT(onNotifierActivated()));
 
     return ref;
 }
@@ -78,7 +79,7 @@ void DnsServiceRegistrar::remove(DNSServiceRef ref)
     if(m_serviceList.contains(ref)) {
         DNSServiceRefDeallocate(ref);
         m_serviceList.removeAll(ref);
-          emit removed("DNS Service un-registered");
+        Model::logger().addEntry(Logger::Info, "DNS Service un-registered");
     }
 }
 
@@ -93,21 +94,21 @@ void DnsServiceRegistrar::remove(DNSServiceRef ref)
  * Return value: none
  */
 void DnsServiceRegistrar::registerCallback(DNSServiceRef ref, DNSServiceFlags flags, DNSServiceErrorType errorCode,
-                                                         const char *name, const char *regtype, const char *domain, void *context)
+                                           const char *name, const char *regtype, const char *domain, void *context)
 {
      DnsServiceRegistrar *pRegistrar = static_cast<DnsServiceRegistrar*>(context);
 
-     if (errorCode != kDNSServiceErr_NoError) {
-          emit pRegistrar->error(QString("Error while registering service (error code = %1)").arg(errorCode));
-          return;
-     }
-     else {
-          if(flags & kDNSServiceFlagsAdd) {
-                emit pRegistrar->added(QString("DNS Service registered (name = %1, type = %2, domain = %3)")
-                                              .arg(QString::fromUtf8(name), QString::fromUtf8(regtype), QString::fromUtf8(domain)));
-          }
-          pRegistrar->m_serviceList.append(ref);
-     }
+    if (errorCode != kDNSServiceErr_NoError) {
+        Model::logger().addEntry(Logger::Error, QString("Error while registering service (error code = %1)").arg(errorCode));
+        return;
+    }
+    else {
+        if(flags & kDNSServiceFlagsAdd) {
+            Model::logger().addEntry(Logger::Info, QString("DNS Service registered (name = %1, type = %2, domain = %3)")
+                                     .arg(QString::fromUtf8(name), QString::fromUtf8(regtype), QString::fromUtf8(domain)));
+        }
+        pRegistrar->m_serviceList.append(ref);
+    }
 }
 
 

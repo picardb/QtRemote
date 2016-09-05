@@ -16,12 +16,11 @@
  *  - pModel: pointer to the application model
  *  - parent: pointer to the parent widget (optional)
  */
-MainWindow::MainWindow(Model *pModel, QWidget *parent)
-    : QMainWindow(parent),
-      m_pModel(pModel)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
 {
     /* Create central widget */
-    MainWidget *pCentralWidget = new MainWidget(pModel);
+    MainWidget *pCentralWidget = new MainWidget;
     setCentralWidget(pCentralWidget);
 
     /* Setup window */

@@ -6,7 +6,6 @@
 
 #include <QWidget>
 #include <QTextEdit>
-#include "../model/Model.h"
 
 
 /*
@@ -19,12 +18,13 @@ class LogWidget : public QWidget
     Q_OBJECT
 
 private:
-    Model       *m_pModel;
+    static const QString FONT;
+    static const int FONT_SIZE;
 
     QTextEdit   *m_pLogEdit;
 
 public:
-    LogWidget(Model *pModel, QWidget *parent = 0);
+    LogWidget(QWidget *parent = 0);
 
 private slots:
     void onLogEntryAdded(const QString& msg);

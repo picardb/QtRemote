@@ -2,28 +2,23 @@
  * (see attached LICENSE.txt file for details)
  */
 
-#include "Server.h"
-
+#include "Network.h"
+#include "model/Model.h"
 
 /*
- * Server::Server
- *
- * Server constructor.
- *
- * Parameters:
- *  - pDnsRegistrar: pointer to the DnsRegistrar instance
- *  - parent: pointer to the QObject parent (optional)
+ * Constants definitions
  */
-Server::Server(DnsServiceRegistrar *pDnsRegistrar, QObject *parent)
+const QString Network::SERVICE_TYPE = "_qtremote._tcp";
+
+Network::Network(QObject *parent)
     : QTcpServer(parent),
-      m_pDnsRegistrar(pDnsRegistrar)
+      m_registrar(this)
 {
 
 }
 
-
 /*
- * Server::start
+ * Network::startServer
  *
  * Starts listening on the specified address/port pair and registers a new DNS service.
  *
@@ -33,7 +28,7 @@ Server::Server(DnsServiceRegistrar *pDnsRegistrar, QObject *parent)
  *
  * Return value: none
  */
-void Server::start(const QHostAddress &address, quint16 port)
+void Network::startServer(const QHostAddress &address, quint16 port)
 {
     if (isListening()) {
         /* TODO: do something with this situation */
@@ -45,15 +40,16 @@ void Server::start(const QHostAddress &address, quint16 port)
             return;
         } else {
             quint16 port = serverPort();
-            emit started(port);
-            m_dnsRef = m_pDnsRegistrar->add(SERVICE_TYPE, port);
+            emit serverStarted();
+            Model::logger().addEntry(Logger::Info, QString("Server started on port %1").arg(port));
+            m_dnsRef = m_registrar.add(SERVICE_TYPE, port);
         }
     }
 }
 
 
 /*
- * Server::stop
+ * Network::stopServer
  *
  * Stops listening. Also un-registers the DNS service.
  *
@@ -61,14 +57,15 @@ void Server::start(const QHostAddress &address, quint16 port)
  *
  * Return value: none
  */
-void Server::stop() {
+void Network::stopServer() {
     if (!isListening()) {
         /* TODO: do something with this situation */
     } else {
         close();
         if (m_dnsRef != NULL) {
-            m_pDnsRegistrar->remove(m_dnsRef);
+            m_registrar.remove(m_dnsRef);
         }
-        emit stopped();
+        emit serverStopped();
+        Model::logger().addEntry(Logger::Info, "Server stopped");
     }
 }

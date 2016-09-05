@@ -4,44 +4,23 @@
 
 #pragma once
 
-#include <QObject>
-
-#include "DnsServiceRegistrar.h"
-#include "Server.h"
-#include "Logger.h"
+#include "network/Network.h"
+#include "log/Logger.h"
 
 
 /*
  * Model class
  *
- * Top-level class of the application model.
+ * Provides access to all model components.
  */
-class Model : public QObject
-{
-	Q_OBJECT
 
+class Model
+{
 private:
-    DnsServiceRegistrar	m_dnsRegistrar;
-    Server              m_server;
-    Logger              m_logger;
+    static Network  m_network;
+    static Logger   m_logger;
 
 public:
-	Model(QObject *parent = 0);
-
-    DNSServiceRef dnsRegistrarAdd(const QString& type, quint16 port, const QString& name = "") { return m_dnsRegistrar.add(type, port, name); }
-    void dnsRegistrarRemove(DNSServiceRef ref) { m_dnsRegistrar.remove(ref); }
-    void serverStart(const QHostAddress &address = QHostAddress::Any, quint16 port = 0) { m_server.start(address, port); }
-    void serverStop() { m_server.stop(); }
-
-signals:
-    logEntryAdded(const QString& );
-    serverStarted();
-    serverStopped();
-
-private slots:
-    void onDnsRegistrarAdded(const QString& msg);
-    void onDnsRegistrarRemoved(const QString& msg);
-    void onDnsRegistrarError(const QString& msg);
-    void onServerStarted(quint16 port);
-    void onServerStopped();
+    static Network& network() { return m_network; }
+    static Logger& logger() { return m_logger; }
 };

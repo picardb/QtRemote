@@ -18,9 +18,11 @@ class Logger : public QObject
     Q_OBJECT
 
 public:
+    enum LogLevel { Info, Warning, Error, Debug };
+
     Logger(QObject *parent = 0);
 
-    void addEntry(const QString& msg);
+    void addEntry(LogLevel lvl, const QString& msg);
 
 signals:
     entryAdded(const QString& );

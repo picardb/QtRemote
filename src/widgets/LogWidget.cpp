@@ -6,6 +6,13 @@
 
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include "model/Model.h"
+
+/*
+ * Constants definitions
+ */
+const QString LogWidget::FONT = "Courier New";
+const int LogWidget::FONT_SIZE = 8;
 
 
 /*
@@ -17,9 +24,8 @@
  *  - pModel: pointer to the application model
  *  - parent: pointer to the parent widget (optional)
  */
-LogWidget::LogWidget(Model *pModel, QWidget *parent)
-    : QWidget(parent),
-      m_pModel(pModel)
+LogWidget::LogWidget(QWidget *parent)
+    : QWidget(parent)
 {
     /* Create layouts */
     QVBoxLayout *pMainLayout = new QVBoxLayout;
@@ -29,12 +35,13 @@ LogWidget::LogWidget(Model *pModel, QWidget *parent)
     QGroupBox *pLogBox = new QGroupBox("Log");
     m_pLogEdit = new QTextEdit;
     m_pLogEdit->setReadOnly(true);
+    m_pLogEdit->setFont(QFont(FONT, FONT_SIZE));
     pBoxLayout->addWidget(m_pLogEdit);
     pLogBox->setLayout(pBoxLayout);
     pMainLayout->addWidget(pLogBox);
 
     /* Connect model signals */
-    connect(pModel, SIGNAL(logEntryAdded(const QString&)),
+    connect(&Model::logger(), SIGNAL(entryAdded(const QString&)),
             this, SLOT(onLogEntryAdded(const QString&)));
 
     /* Setup widget */

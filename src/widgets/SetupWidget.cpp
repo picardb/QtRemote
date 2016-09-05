@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include "model/Model.h"
 
 
 /*
@@ -19,9 +20,8 @@
  *  - pModel: pointer to the application model
  *  - parent: pointer to the parent widget (optional)
  */
-SetupWidget::SetupWidget(Model *pModel, QWidget *parent)
+SetupWidget::SetupWidget(QWidget *parent)
     : QWidget(parent),
-      m_pModel(pModel),
       m_isStarted(false)
 {
     /* Create layouts */
@@ -46,9 +46,9 @@ SetupWidget::SetupWidget(Model *pModel, QWidget *parent)
     pMainLayout->addWidget(pSetupBox);
 
     /* Connect model signals */
-    connect(pModel, SIGNAL(serverStarted()),
+    connect(&Model::network(), SIGNAL(serverStarted()),
             this, SLOT(onServerStarted()));
-    connect(pModel, SIGNAL(serverStopped()),
+    connect(&Model::network(), SIGNAL(serverStopped()),
             this, SLOT(onServerStopped()));
 
     /* Setup widget */
@@ -125,11 +125,11 @@ void SetupWidget::onServerStopped() {
  */
 void SetupWidget::onStartStopButtonClicked() {
     if (m_isStarted) {
-        m_pModel->serverStop();
+        Model::network().stopServer();
     }
     else {
         /* Get port number from the edit */
         quint16 port = m_pPortEdit->text().toUInt();
-        m_pModel->serverStart(QHostAddress::Any, port);
+        Model::network().startServer(QHostAddress::Any, port);
     }
 }

@@ -13,24 +13,25 @@ TEMPLATE = app
 
 LIBS += -L$$PWD/lib -ldnssd
 
+INCLUDEPATH += src/
 
 SOURCES += \
     src/main.cpp \
     src/widgets/MainWindow.cpp \
-    src/model/Model.cpp \
-    src/model/DnsServiceRegistrar.cpp \
-    src/model/Logger.cpp \
+    src/model/log/Logger.cpp \
+    src/model/network/DnsServiceRegistrar.cpp \
+    src/model/network/Network.cpp \
     src/widgets/LogWidget.cpp \
     src/widgets/MainWidget.cpp \
-    src/model/Server.cpp \
-    src/widgets/SetupWidget.cpp
+    src/widgets/SetupWidget.cpp \
+    src/model/Model.cpp
 
 HEADERS  += \
     src/widgets/MainWindow.h \
     src/model/Model.h \
-    src/model/DnsServiceRegistrar.h \
-    src/model/Logger.h \
+    src/model/log/Logger.h \
+    src/model/network/DnsServiceRegistrar.h \
+    src/model/network/Network.h \
     src/widgets/LogWidget.h \
     src/widgets/MainWidget.h \
-    src/model/Server.h \
     src/widgets/SetupWidget.h
