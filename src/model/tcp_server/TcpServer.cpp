@@ -2,27 +2,35 @@
  * (see attached LICENSE.txt file for details)
  */
 
-#include "Network.h"
+#include "TcpServer.h"
+
 #include "model/Model.h"
-#include <QTcpSocket>
 
 /*
  * Constants definitions
  */
-const QString Network::SERVICE_TYPE = "_qtremote._tcp";
+const QString TcpServer::SERVICE_TYPE = "_qtremote._tcp";
 
-Network::Network(QObject *parent)
+/*
+ * TcpServer::TcpServer
+ *
+ * TcpServer constructor.
+ *
+ * Parameters:
+ *	- parent: pointer to the QObject parent (optional)
+ */
+TcpServer::TcpServer(QObject *parent)
     : QTcpServer(parent),
       m_registrar(this)
 {
     /* Connect TCP server signals */
     connect(this, SIGNAL(newConnection()),
-            this, SLOT(onTcpNewConnection()));
+            this, SLOT(onClientConnection()));
 
 }
 
 /*
- * Network::startServer
+ * TcpServer::startServer
  *
  * Starts listening on the specified address/port pair and registers a new DNS service.
  *
@@ -32,7 +40,7 @@ Network::Network(QObject *parent)
  *
  * Return value: none
  */
-void Network::startServer(const QHostAddress &address, quint16 port)
+void TcpServer::startServer(const QHostAddress &address, quint16 port)
 {
     if (isListening()) {
         /* TODO: do something with this situation */
@@ -53,7 +61,7 @@ void Network::startServer(const QHostAddress &address, quint16 port)
 
 
 /*
- * Network::stopServer
+ * TcpServer::stopServer
  *
  * Stops listening. Also un-registers the DNS service.
  *
@@ -61,7 +69,7 @@ void Network::startServer(const QHostAddress &address, quint16 port)
  *
  * Return value: none
  */
-void Network::stopServer() {
+void TcpServer::stopServer() {
     if (!isListening()) {
         /* TODO: do something with this situation */
     } else {
@@ -76,7 +84,7 @@ void Network::stopServer() {
 
 
 /*
- * Network::onTcpNewConnection
+ * TcpServer::onClientConnection
  *
  * Called when the TCP server notifies a new connection. Accepts the connection
  * and adds the client to the client list.
@@ -85,38 +93,40 @@ void Network::stopServer() {
  *
  * Return value: none
  */
-void Network::onTcpNewConnection() {
+void TcpServer::onClientConnection() {
     /* Accept connection */
-    QTcpSocket *clientConnection = nextPendingConnection();
+    QTcpSocket *pClientSocket = nextPendingConnection();
 
-    /* Add client to the list */
-    if (clientConnection != 0) {
-        connect(clientConnection, SIGNAL(disconnected()),
-                this, SLOT(onTcpDisconnection()));
-        m_clientList.append(clientConnection);
-        Model::logger().addEntry(Logger::Info, "New connection from " + clientConnection->peerAddress().toString());
+    /* Create client */
+    if (pClientSocket != 0) {
+        Client *pClient = new Client(pClientSocket);
+        connect(pClient, SIGNAL(disconnected()),
+                this, SLOT(onClientDisconnection()));
+        m_clientList.append(pClient);
+        Model::logger().addEntry(Logger::Info, "New connection from " + pClient->ipAddress());
     }
 }
 
 
 /*
- * Network::onTcpDisconnection
+ * TcpServer::onClientDisconnection
  *
  * Called when a client notifies its disconnection. Removes the client from the list
- * and deletes the corresponding socket.
+ * and deletes it.
  *
  * Parameters: none
  *
  * Return value: none
  */
-void Network::onTcpDisconnection() {
-    /* Remove client from the list */
-    QTcpSocket *clientConnection = static_cast<QTcpSocket*>(sender());
-    m_clientList.removeAll(clientConnection);
+void TcpServer::onClientDisconnection() {
+    Client *pClient = static_cast<Client*>(sender());
 
     /* Log info */
-    Model::logger().addEntry(Logger::Info, "Connection closed from" + clientConnection->peerAddress().toString());
+    Model::logger().addEntry(Logger::Info, "Connection closed from" + pClient->ipAddress());
+
+    /* Remove client from the list */
+    m_clientList.removeAll(pClient);
 
     /* Delete the client */
-    clientConnection->deleteLater();
+    pClient->deleteLater();
 }

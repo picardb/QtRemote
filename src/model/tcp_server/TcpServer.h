@@ -6,20 +6,30 @@
 
 #include <QTcpServer>
 #include "DnsServiceRegistrar.h"
+/* This source file is distributed under the MIT license
+ * (see attached LICENSE.txt file for details)
+ */
 
-class Network : public QTcpServer
+#include "Client.h"
+
+/*
+ * TcpServer class
+ *
+ * TCP server. Accepts incoming connections and creates Clients.
+ */
+class TcpServer : public QTcpServer
 {
     Q_OBJECT
 
 private:
     DnsServiceRegistrar     m_registrar;
     DNSServiceRef           m_dnsRef;
-    QList<QTcpSocket*>      m_clientList;
+    QList<Client*>          m_clientList;
 
     static const QString    SERVICE_TYPE;
 
 public:
-    Network(QObject *parent = 0);
+    TcpServer(QObject *parent = 0);
 
     void startServer(const QHostAddress &address = QHostAddress::Any, quint16 port = 0);
     void stopServer();
@@ -29,6 +39,6 @@ signals:
     serverStopped();
 
 private slots:
-    void onTcpNewConnection();
-    void onTcpDisconnection();
+    void onClientConnection();
+    void onClientDisconnection();
 };

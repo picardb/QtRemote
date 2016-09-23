@@ -4,23 +4,24 @@
 
 #pragma once
 
-#include "network/Network.h"
+#include "tcp_server/TcpServer.h"
 #include "log/Logger.h"
-
+#include "control/Control.h"
 
 /*
  * Model class
  *
  * Provides access to all model components.
  */
-
 class Model
 {
 private:
-    static Network  m_network;
-    static Logger   m_logger;
+    static TcpServer    m_tcpServer;
+    static Logger       m_logger;
+    static Control      m_control;
 
 public:
-    static Network& network() { return m_network; }
+    static TcpServer& tcpServer() { return m_tcpServer; }
     static Logger& logger() { return m_logger; }
+    static Control& control() { return m_control; }
 };

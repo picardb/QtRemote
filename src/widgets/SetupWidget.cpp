@@ -46,9 +46,9 @@ SetupWidget::SetupWidget(QWidget *parent)
     pMainLayout->addWidget(pSetupBox);
 
     /* Connect model signals */
-    connect(&Model::network(), SIGNAL(serverStarted()),
+    connect(&Model::tcpServer(), SIGNAL(serverStarted()),
             this, SLOT(onServerStarted()));
-    connect(&Model::network(), SIGNAL(serverStopped()),
+    connect(&Model::tcpServer(), SIGNAL(serverStopped()),
             this, SLOT(onServerStopped()));
 
     /* Setup widget */
@@ -125,11 +125,11 @@ void SetupWidget::onServerStopped() {
  */
 void SetupWidget::onStartStopButtonClicked() {
     if (m_isStarted) {
-        Model::network().stopServer();
+        Model::tcpServer().stopServer();
     }
     else {
         /* Get port number from the edit */
         quint16 port = m_pPortEdit->text().toUInt();
-        Model::network().startServer(QHostAddress::Any, port);
+        Model::tcpServer().startServer(QHostAddress::Any, port);
     }
 }

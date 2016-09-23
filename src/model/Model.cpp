@@ -1,7 +1,12 @@
+/* This source file is distributed under the MIT license
+ * (see attached LICENSE.txt file for details)
+ */
+
 #include "Model.h"
 
 /*
  * Components definitions
  */
-Network  Model::m_network;
-Logger   Model::m_logger;
+TcpServer   Model::m_tcpServer;
+Logger      Model::m_logger;
+Control     Model::m_control;
