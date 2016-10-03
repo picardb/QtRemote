@@ -84,7 +84,11 @@ void AudioControls::raiseVolume(const Request &request) {
     if (volume > 1.0) {
         volume = 1.0;
     }
-    m_pEndpointVolume->SetChannelVolumeLevelScalar(0, volume, NULL);
+    unsigned int channelCount;
+    m_pEndpointVolume->GetChannelCount(&channelCount);
+    for (int i = 0 ; i < channelCount ; i++) {
+        m_pEndpointVolume->SetChannelVolumeLevelScalar(i, volume, NULL);
+    }
 }
 
 /*
@@ -112,5 +116,9 @@ void AudioControls::lowerVolume(const Request &request) {
     if (volume < 0.0) {
         volume = 0.0;
     }
-    m_pEndpointVolume->SetChannelVolumeLevelScalar(0, volume, NULL);
+    unsigned int channelCount;
+    m_pEndpointVolume->GetChannelCount(&channelCount);
+    for (int i = 0 ; i < channelCount ; i++) {
+        m_pEndpointVolume->SetChannelVolumeLevelScalar(i, volume, NULL);
+    }
 }
