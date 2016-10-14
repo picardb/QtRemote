@@ -18,11 +18,15 @@ private:
     static const unsigned char CMD_ID_RAISE_VOL = 0x01;
     static const unsigned char CMD_ID_LOWER_VOL = 0x02;
     static const unsigned char CMD_ID_SET_VOL   = 0x03;
+    static const unsigned char CMD_ID_MUTE_VOL  = 0x04;
 
     IAudioEndpointVolume    *m_pEndpointVolume;
 
+    bool getAudioEndpoint();
     void raiseVolume(const Request& request);
     void lowerVolume(const Request& request);
+    void setVolume(const Request& request);
+    void muteVolume(const Request& request);
 
 public:
     AudioControls();
