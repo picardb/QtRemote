@@ -2,12 +2,28 @@
  * (see attached LICENSE.txt file for details)
  */
 
-#include "Control.h"
+#include "WinVistaControl.h"
 
 #include "model/Model.h"
 
+
 /*
- * Control::processRequest
+ * WinVistaControl::WinVistaControl
+ *
+ * WinVistaControl constructor.
+ *
+ * Parameters:
+ *  - parent: pointer to the parent QObject (optional)
+ */
+WinVistaControl::WinVistaControl(QObject *parent)
+    : Control(parent)
+{
+
+}
+
+
+/*
+ * WinVistaControl::processRequest
  *
  * Processes a request from a client. Dispatches the request to the adequate
  * sub-system.
@@ -17,7 +33,7 @@
  *
  * Return value: none
  */
-void Control::processRequest(const Request &request) {
+void WinVistaControl::processRequest(const Request &request) {
     switch (request.system) {
     case SYSTEM_ID_AUDIO:
         m_audio.processRequest(request);

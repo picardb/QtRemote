@@ -11,7 +11,7 @@
 /*
  * Logger class
  *
- * Manages the application log.
+ * Interface for the logging service.
  */
 class Logger : public QObject
 {
@@ -20,9 +20,9 @@ class Logger : public QObject
 public:
     enum LogLevel { Info, Warning, Error, Debug };
 
-    Logger(QObject *parent = 0);
+    Logger(QObject *parent = 0) : QObject(parent) { /* Do nothing */ }
 
-    void addEntry(LogLevel lvl, const QString& msg);
+    virtual void addEntry(LogLevel lvl, const QString &msg) = 0;
 
 signals:
     entryAdded(const QString& );

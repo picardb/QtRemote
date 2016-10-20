@@ -4,24 +4,38 @@
 
 #pragma once
 
-#include "tcp_server/TcpServer.h"
+#include "log/NullLogger.h"
 #include "log/Logger.h"
+#include "tcp_server/NullTcpServer.h"
+#include "tcp_server/TcpServer.h"
+#include "control/NullControl.h"
 #include "control/Control.h"
 
 /*
  * Model class
  *
- * Provides access to all model components.
+ * Provides access to all model services.
  */
 class Model
 {
 private:
-    static TcpServer    m_tcpServer;
-    static Logger       m_logger;
-    static Control      m_control;
+    /* Loggers */
+    static NullLogger       m_nullLogger;
+    static Logger*          m_pLogger;
+
+    /* TCP servers */
+    static NullTcpServer    m_nullTcpServer;
+    static TcpServer*       m_pTcpServer;
+
+    /* Controls */
+    static NullControl      m_nullControl;
+    static Control*         m_pControl;
 
 public:
-    static TcpServer& tcpServer() { return m_tcpServer; }
-    static Logger& logger() { return m_logger; }
-    static Control& control() { return m_control; }
+    static void provideLogger(Logger* pLogger);
+    static void provideTcpServer(TcpServer* pServer);
+    static void provideControl(Control *pControl);
+    static Logger& logger() { return *m_pLogger; }
+    static TcpServer& tcpServer() { return *m_pTcpServer; }
+    static Control& control() { return *m_pControl; }
 };

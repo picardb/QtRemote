@@ -22,12 +22,13 @@ SOURCES += \
     src/widgets/MainWidget.cpp \
     src/widgets/SetupWidget.cpp \
     src/model/Model.cpp \
-    src/model/log/Logger.cpp \
-    src/model/control/Control.cpp \
-    src/model/control/AudioControls.cpp \
     src/model/tcp_server/DnsServiceRegistrar.cpp \
-    src/model/tcp_server/TcpServer.cpp \
-    src/model/tcp_server/Client.cpp
+    src/model/tcp_server/Client.cpp \
+    src/widgets/SettingsDialog.cpp \
+    src/model/log/FileLogger.cpp \
+    src/model/tcp_server/DnsSdTcpServer.cpp \
+    src/model/control/WinVistaControl.cpp \
+    src/model/control/WinVistaAudioControls.cpp
 
 HEADERS  += \
     src/widgets/MainWindow.h \
@@ -37,8 +38,17 @@ HEADERS  += \
     src/model/Model.h \
     src/model/log/Logger.h \
     src/model/control/Control.h \
-    src/model/control/AudioControls.h \
     src/model/tcp_server/DnsServiceRegistrar.h \
     src/model/tcp_server/TcpServer.h \
     src/model/tcp_server/Request.h \
-    src/model/tcp_server/Client.h
+    src/model/tcp_server/Client.h \
+    src/widgets/SettingsDialog.h \
+    src/globals.h \
+    src/constants.h \
+    src/model/log/NullLogger.h \
+    src/model/log/FileLogger.h \
+    src/model/tcp_server/NullTcpServer.h \
+    src/model/tcp_server/DnsSdTcpServer.h \
+    src/model/control/WinVistaControl.h \
+    src/model/control/WinVistaAudioControls.h \
+    src/model/control/NullControl.h

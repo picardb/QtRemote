@@ -4,21 +4,19 @@
 
 #pragma once
 
-#include "AudioControls.h"
+#include <QObject>
 #include "model/tcp_server/Request.h"
+
 
 /*
  * Control class
  *
- * Processes all control requests.
+ * Interface for the control service.
  */
-class Control
+class Control : public QObject
 {
-private:
-    static const unsigned char  SYSTEM_ID_AUDIO = 1;
-
-    AudioControls   m_audio;
-
 public:
-    void processRequest(const Request& request);
+    Control(QObject *parent = 0) : QObject(parent) { /* Do nothing */ }
+
+    virtual void processRequest(const Request& request) = 0;
 };

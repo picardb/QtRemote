@@ -2,35 +2,37 @@
  * (see attached LICENSE.txt file for details)
  */
 
-#include "TcpServer.h"
+#include "DnsSdTcpServer.h"
 
 #include "model/Model.h"
 
 /*
  * Constants definitions
  */
-const QString TcpServer::SERVICE_TYPE = "_qtremote._tcp";
+const QString DnsSdTcpServer::SERVICE_TYPE = "_qtremote._tcp";
+
 
 /*
- * TcpServer::TcpServer
+ * DnsSdTcpServer::DnsSdTcpServer
  *
- * TcpServer constructor.
+ * DnsSdTcpServer constructor.
  *
  * Parameters:
  *	- parent: pointer to the QObject parent (optional)
  */
-TcpServer::TcpServer(QObject *parent)
-    : QTcpServer(parent),
+DnsSdTcpServer::DnsSdTcpServer(QObject *parent)
+    : TcpServer(parent),
+      m_server(),
       m_registrar(this)
 {
     /* Connect TCP server signals */
-    connect(this, SIGNAL(newConnection()),
+    connect(&m_server, SIGNAL(newConnection()),
             this, SLOT(onClientConnection()));
-
 }
 
+
 /*
- * TcpServer::startServer
+ * DnsSdTcpServer::startServer
  *
  * Starts listening on the specified address/port pair and registers a new DNS service.
  *
@@ -40,18 +42,18 @@ TcpServer::TcpServer(QObject *parent)
  *
  * Return value: none
  */
-void TcpServer::startServer(const QHostAddress &address, quint16 port)
+void DnsSdTcpServer::startServer(const QHostAddress &address, quint16 port)
 {
-    if (isListening()) {
+    if (m_server.isListening()) {
         /* TODO: do something with this situation */
     }
     else {
-        bool result = listen(address, port);
+        bool result = m_server.listen(address, port);
         if (!result) {
             /* TODO: do something with the error */
             return;
         } else {
-            quint16 port = serverPort();
+            quint16 port = m_server.serverPort();
             emit serverStarted();
             Model::logger().addEntry(Logger::Info, QString("Server started on port %1").arg(port));
             m_dnsRef = m_registrar.add(SERVICE_TYPE, port);
@@ -61,7 +63,7 @@ void TcpServer::startServer(const QHostAddress &address, quint16 port)
 
 
 /*
- * TcpServer::stopServer
+ * DnsSdTcpServer::stopServer
  *
  * Stops listening. Also un-registers the DNS service.
  *
@@ -69,11 +71,11 @@ void TcpServer::startServer(const QHostAddress &address, quint16 port)
  *
  * Return value: none
  */
-void TcpServer::stopServer() {
-    if (!isListening()) {
+void DnsSdTcpServer::stopServer() {
+    if (!m_server.isListening()) {
         /* TODO: do something with this situation */
     } else {
-        close();
+        m_server.close();
         if (m_dnsRef != NULL) {
             m_registrar.remove(m_dnsRef);
         }
@@ -84,7 +86,7 @@ void TcpServer::stopServer() {
 
 
 /*
- * TcpServer::onClientConnection
+ * DnsSdTcpServer::onClientConnection
  *
  * Called when the TCP server notifies a new connection. Accepts the connection
  * and adds the client to the client list.
@@ -93,9 +95,9 @@ void TcpServer::stopServer() {
  *
  * Return value: none
  */
-void TcpServer::onClientConnection() {
+void DnsSdTcpServer::onClientConnection() {
     /* Accept connection */
-    QTcpSocket *pClientSocket = nextPendingConnection();
+    QTcpSocket *pClientSocket = m_server.nextPendingConnection();
 
     /* Create client */
     if (pClientSocket != 0) {
@@ -109,7 +111,7 @@ void TcpServer::onClientConnection() {
 
 
 /*
- * TcpServer::onClientDisconnection
+ * DnsSdTcpServer::onClientDisconnection
  *
  * Called when a client notifies its disconnection. Removes the client from the list
  * and deletes it.
@@ -118,7 +120,7 @@ void TcpServer::onClientConnection() {
  *
  * Return value: none
  */
-void TcpServer::onClientDisconnection() {
+void DnsSdTcpServer::onClientDisconnection() {
     Client *pClient = static_cast<Client*>(sender());
 
     /* Log info */
@@ -130,3 +132,4 @@ void TcpServer::onClientDisconnection() {
     /* Delete the client */
     pClient->deleteLater();
 }
+

@@ -7,12 +7,13 @@
 #include <endpointvolume.h>
 #include "model/tcp_server/Request.h"
 
+
 /*
- * AudioControls class
+ * WinVistaAudioControls class
  *
- * Manages all windows audio controls.
+ * Manages all Windows Vista (and superior) audio controls.
  */
-class AudioControls
+class WinVistaAudioControls
 {    
 private:
     static const unsigned char CMD_ID_RAISE_VOL = 0x01;
@@ -29,7 +30,7 @@ private:
     void muteVolume(const Request& request);
 
 public:
-    AudioControls();
+    WinVistaAudioControls();
 
     void processRequest(const Request& request);
 };

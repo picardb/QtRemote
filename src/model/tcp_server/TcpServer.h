@@ -4,41 +4,26 @@
 
 #pragma once
 
-#include <QTcpServer>
-#include "DnsServiceRegistrar.h"
-/* This source file is distributed under the MIT license
- * (see attached LICENSE.txt file for details)
- */
+#include <QObject>
+#include <QHostAddress>
 
-#include "Client.h"
 
 /*
  * TcpServer class
  *
- * TCP server. Accepts incoming connections and creates Clients.
+ * Interface for the TCP server.
  */
-class TcpServer : public QTcpServer
+class TcpServer : public QObject
 {
     Q_OBJECT
 
-private:
-    DnsServiceRegistrar     m_registrar;
-    DNSServiceRef           m_dnsRef;
-    QList<Client*>          m_clientList;
-
-    static const QString    SERVICE_TYPE;
-
 public:
-    TcpServer(QObject *parent = 0);
+    TcpServer(QObject *parent = 0) : QObject(parent) { /* Do nothing */ }
 
-    void startServer(const QHostAddress &address = QHostAddress::Any, quint16 port = 0);
-    void stopServer();
+    virtual void startServer(const QHostAddress &address, quint16 port) = 0;
+    virtual void stopServer() = 0;
 
 signals:
     serverStarted();
     serverStopped();
-
-private slots:
-    void onClientConnection();
-    void onClientDisconnection();
 };

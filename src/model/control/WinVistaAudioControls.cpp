@@ -2,20 +2,21 @@
  * (see attached LICENSE.txt file for details)
  */
 
-#include "AudioControls.h"
+#include "WinVistaAudioControls.h"
 
 #include <windows.h>
 #include <mmdeviceapi.h>
 #include "model/Model.h"
 
+
 /*
- * AudioControls::AudioControls
+ * WinVistaAudioControls::WinVistaAudioControls
  *
- * AudioControls constructor. Retrieves the windows endpoint volume.
+ * WinVistaAudioControls constructor. Retrieves the windows endpoint volume.
  *
  * Parameters: none
  */
-AudioControls::AudioControls()
+WinVistaAudioControls::WinVistaAudioControls()
     : m_pEndpointVolume(NULL)
 {
     /* Get windows audio endpoint */
@@ -24,8 +25,9 @@ AudioControls::AudioControls()
     }
 }
 
+
 /*
- * AudioControls::getAudioEndpoint
+ * WinVistaAudioControls::getAudioEndpoint
  *
  * Gets the audio enpoint using Windows API.
  *
@@ -33,7 +35,7 @@ AudioControls::AudioControls()
  *
  * Return value: operation success (true/false)
  */
-bool AudioControls::getAudioEndpoint() {
+bool WinVistaAudioControls::getAudioEndpoint() {
     HRESULT hr;
 
     /* Init COM library */
@@ -70,8 +72,9 @@ bool AudioControls::getAudioEndpoint() {
     }
 }
 
+
 /*
- * AudioControls::processRequest
+ * WinVistaAudioControls::processRequest
  *
  * Processes an audio request.
  *
@@ -80,7 +83,7 @@ bool AudioControls::getAudioEndpoint() {
  *
  * Return value: none
  */
-void AudioControls::processRequest(const Request &request) {
+void WinVistaAudioControls::processRequest(const Request &request) {
     switch (request.command) {
     case CMD_ID_RAISE_VOL:
         raiseVolume(request);
@@ -103,8 +106,9 @@ void AudioControls::processRequest(const Request &request) {
     }
 }
 
+
 /*
- * AudioControls::raiseVolume
+ * WinVistaAudioControls::raiseVolume
  *
  * Processes a raise volume request.
  *
@@ -113,7 +117,7 @@ void AudioControls::processRequest(const Request &request) {
  *
  * Return value: none
  */
-void AudioControls::raiseVolume(const Request &request) {
+void WinVistaAudioControls::raiseVolume(const Request &request) {
     /* Get percentage from the data */
     if (request.length != 1 || request.data.size() != 1) {
         Model::logger().addEntry(Logger::Error, QString("Error while trying to process audio request: request length is invalid"));
@@ -135,8 +139,9 @@ void AudioControls::raiseVolume(const Request &request) {
     }
 }
 
+
 /*
- * AudioControls::lowerVolume
+ * WinVistaAudioControls::lowerVolume
  *
  * Processes a lower volume request.
  *
@@ -145,7 +150,7 @@ void AudioControls::raiseVolume(const Request &request) {
  *
  * Return value: none
  */
-void AudioControls::lowerVolume(const Request &request) {
+void WinVistaAudioControls::lowerVolume(const Request &request) {
     /* Get percentage from the data */
     if (request.length != 1 || request.data.size() != 1) {
         Model::logger().addEntry(Logger::Error, QString("Error in LowerVolume request: request length is invalid"));
@@ -167,8 +172,9 @@ void AudioControls::lowerVolume(const Request &request) {
     }
 }
 
+
 /*
- * AudioControls::setVolume
+ * WinVistaAudioControls::setVolume
  *
  * Processes a set volume request.
  *
@@ -177,7 +183,7 @@ void AudioControls::lowerVolume(const Request &request) {
  *
  * Return value: none
  */
-void AudioControls::setVolume(const Request &request) {
+void WinVistaAudioControls::setVolume(const Request &request) {
     /* Get volume from the data */
     if (request.length != 1 || request.data.size() != 1) {
         Model::logger().addEntry(Logger::Error, QString("Error in SetVolume request: request length is invalid"));
@@ -200,8 +206,9 @@ void AudioControls::setVolume(const Request &request) {
     }
 }
 
+
 /*
- * AudioControls::muteVolume
+ * WinVistaAudioControls::muteVolume
  *
  * Processes a mute/unmute volume request.
  *
@@ -210,7 +217,7 @@ void AudioControls::setVolume(const Request &request) {
  *
  * Return value: none
  */
-void AudioControls::muteVolume(const Request &request) {
+void WinVistaAudioControls::muteVolume(const Request &request) {
     /* Set volume mute status */
     BOOL isMuted;
     m_pEndpointVolume->GetMute(&isMuted);

@@ -2,28 +2,28 @@
  * (see attached LICENSE.txt file for details)
  */
 
-#include "Logger.h"
+#include "FileLogger.h"
 
 #include <QDateTime>
 
 
 /*
- * Logger::Logger
+ * FileLogger::FileLogger
  *
- * Logger constructor.
+ * FileLogger constructor.
  *
  * Parameters:
  *	- parent: pointer to the QObject parent (optional)
  */
-Logger::Logger(QObject *parent)
-    : QObject(parent)
+FileLogger::FileLogger(QObject *parent)
+    : Logger(parent)
 {
 
 }
 
 
 /*
- * Logger::addEntry
+ * FileLogger::addEntry
  *
  * Adds a new entry to the log.
  *
@@ -33,7 +33,7 @@ Logger::Logger(QObject *parent)
  *
  * Return value: none
  */
-void Logger::addEntry(LogLevel lvl, const QString &msg)
+void FileLogger::addEntry(LogLevel lvl, const QString &msg)
 {
     /* Get current time in string format */
     QString timeStr(QDateTime::currentDateTime().toString("[hh:mm::ss]"));
